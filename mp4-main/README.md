@@ -11,8 +11,8 @@ Updated_Final_Report.pdf includes a detailed explanation of the project, its pro
 
 
 ## Project Team
-Murat Altindag
-Kelsey Chang
+Murat Altindag,
+Kelsey Chang,
 Xinpei Jiang
 
 ## Plagiarism Rules

@@ -1,89 +1,100 @@
-# RV32I Microprocessor
-Five-stage microprocessor that implements the 32-bit RISC-V instruction set. 
+# Pipelined Microprocessor Design - RV32I Implementation
 
-The processor is connected to a split L1 cache through an arbiter, and the L1 caches are connected to a unified L2 cache.
+This repository contains the implementation and detailed documentation of a pipelined microprocessor designed to execute the RV32I instruction set. The project was developed as part of ECE 411: Computer Organization and Design and provides insights into pipelined microprocessor architecture, optimization techniques, and associated challenges.
 
-You can see the paper design at paper_design.png.
+---
 
-The code is in the mp4 directory. 
+## Introduction
 
-Updated_Final_Report.pdf includes a detailed explanation of the project, its progression, and the results.
+The goal of this project was to design and optimize a pipelined microprocessor to enhance understanding of microprocessor design principles. The implementation involved:
 
+- Developing a 5-stage pipeline microprocessor for the RV32I instruction set.
+- Tackling standard pipelining challenges like data hazards, control hazards, and performance bottlenecks.
+- Incorporating advanced features like a memory hierarchy, branch predictors, and prefetching mechanisms for optimization.
 
-## Project Team
-Murat Altindag,
-Kelsey Chang,
-Xinpei Jiang
+---
 
-## Plagiarism Rules
+## Project Overview
 
-ACADEMIC INTEGRITY
------
-Please review the University of Illinois Student Code before starting,
-particularly all subsections of Article 1, Part 4 Academic Integrity and Procedure [here](http://studentcode.illinois.edu/article1_part4_1-401.html).
+The project was structured into four major checkpoints:
+1. **Baseline Design**: Initial 5-stage pipeline with basic functionality.
+2. **Memory Hierarchy and Hazard Detection**: Integration of instruction/data caches and hazard management.
+3. **Advanced Features**: Addition of branch prediction, an L2 cache, and hardware prefetching.
+4. **Design Competition**: Final optimization and synthesis of the complete design.
 
-**§ 1‑402 Academic Integrity Infractions**
+Key features:
+- Implements RV32I (excluding FENCE*, ECALL, EBREAK, and CSRR instructions).
+- Modularity for ease of testing and integration of various components.
+- Optimized memory hierarchy and branch prediction.
 
-(a).	Cheating. No student shall use or attempt to use in any academic exercise materials, information, study aids, or electronic data that the student knows or should know is unauthorized. Instructors are strongly encouraged to make in advance a clear statement of their policies and procedures concerning the use of shared study aids, examination files, and related materials and forms of assistance. Such advance notification is especially important in the case of take-home examinations. During any examination, students should assume that external assistance (e.g., books, notes, calculators, and communications with others) is prohibited unless specifically authorized by the Instructor. A violation of this section includes but is not limited to:
+---
 
-(1)	Allowing others to conduct research or prepare any work for a student without prior authorization from the Instructor, including using the services of commercial term paper companies. 
+## Features and Design Details
 
-(2)	Submitting substantial portions of the same academic work for credit more than once or by more than one student without authorization from the Instructors to whom the work is being submitted. 
+### Pipeline Stages
+1. **Fetch**: Fetches instructions and updates the program counter.
+2. **Decode**: Decodes instructions into their respective components.
+3. **Execute**: Executes arithmetic, logical operations, and branch decisions.
+4. **Memory Access**: Reads and writes to data memory.
+5. **Write-Back**: Updates the destination register with computed results.
 
-(3) Working with another person without authorization to satisfy an individual assignment.
+### Advanced Features
+1. **Branch Prediction**:
+   - Local history-based predictor using a 2-bit state machine.
+   - Branch Target Buffer (BTB) for efficient branch target predictions.
 
-(b) Plagiarism. No student shall represent the words, work, or ideas of another as his or her own in any academic endeavor. A violation of this section includes but is not limited to:
+2. **Memory Hierarchy**:
+   - Direct-mapped L1 caches and a unified 8-way set-associative L2 cache.
+   - Prefetching with a tagged stream buffer to reduce cache misses.
+   - Evaluation of eviction write buffers for optimization.
 
-(1)	Copying: Submitting the work of another as one’s own. 
+3. **Hazard Management**:
+   - Data forwarding to mitigate data hazards.
+   - Static not-taken branch predictor for control hazards.
 
-(2)	Direct Quotation: Every direct quotation must be identified by quotation marks or by appropriate indentation and must be promptly cited. Proper citation style for many academic departments is outlined in such manuals as the MLA Handbook or K.L. Turabian’s A Manual for Writers of Term Papers, Theses and Dissertations. These and similar publications are available in the University bookstore or library. The actual source from which cited information was obtained should be acknowledged.
+---
 
-(3)	Paraphrase: Prompt acknowledgment is required when material from another source is paraphrased or summarized in whole or in part. This is true even if the student’s words differ substantially from those of the source. A citation acknowledging only a directly quoted statement does not suffice as an acknowledgment of any preceding or succeeding paraphrased material. 
+## Performance Analysis
 
-(4)	Borrowed Facts or Information: Information obtained in one’s reading or research that is not common knowledge must be acknowledged. Examples of common knowledge might include the names of leaders of prominent nations, basic scientific laws, etc. Materials that contribute only to one’s general understanding of the subject may be acknowledged in a bibliography and need not be immediately cited. One citation is usually sufficient to acknowledge indebtedness when a number of connected sentences in the paper draw their special information from one source.
+- **Branch Predictor**:
+  - Achieved an average speedup of ~1.76× compared to static prediction.
+  - Average accuracy below 80% due to limited local history utilization.
 
-(c) Fabrication. No student shall falsify or invent any information or citation in an academic endeavor. A violation of this section includes but is not limited to:
+- **L2 Cache**:
+  - Reduced memory access latency with an average speedup of ~5.15×.
+  - Increased power consumption and area due to higher complexity.
 
-(1)	Using invented information in any laboratory experiment or other academic endeavor without notice to and authorization from the Instructor or examiner. It would be improper, for example, to analyze one sample in an experiment and covertly invent data based on that single experiment for several more required analyses. 
+- **Prefetching**:
+  - Minimal impact due to correctness issues and low branch locality.
 
-(2)	Altering the answers given for an exam after the examination has been graded. 
+---
 
-(3)	Providing false or misleading information for the purpose of gaining an academic advantage.
+## Final Design Highlights
 
-(d)	Facilitating Infractions of Academic Integrity. No student shall help or attempt to help another to commit an infraction of academic integrity, where one knows or should know that through one’s acts or omissions such an infraction may be facilitated. A violation of this section includes but is not limited to:
+- Modular architecture enabling easy feature integration and testing.
+- Parameterized L2 cache supporting future scalability.
+- Competitive performance with significant speedups from branch prediction and memory hierarchy.
 
-(1)	Allowing another to copy from one’s work. 
+---
 
-(2)	Taking an exam by proxy for someone else. This is an infraction of academic integrity on the part of both the student enrolled in the course and the proxy or substitute. 
+## Future Work
 
-(3)	Removing an examination or quiz from a classroom, faculty office, or other facility without authorization.
+Further optimizations could include:
+- Enhanced verification tools for debugging and performance analysis.
+- Improved branch predictors leveraging global history.
+- Exploration of varying cache line sizes for better cache utilization.
 
-(e)	Bribes, Favors, and Threats. No student shall bribe or attempt to bribe, promise favors to or make threats against any person with the intent to affect a record of a grade or evaluation of academic performance. This includes conspiracy with another person who then takes the action on behalf of the student.
+---
 
-(f)	Academic Interference. No student shall tamper with, alter, circumvent, or destroy any educational material or resource in a manner that deprives any other student of fair access or reasonable use of that material or resource. 
+## References
 
-(1)	Educational resources include but are not limited to computer facilities, electronic data, required/reserved readings, reference works, or other library materials. 
+1. Hennessy, J., Patterson, D. (2014). *Computer Architecture: A Quantitative Approach*.
+2. Jouppi, N. (1990). *Improving Direct-Mapped Cache Performance by the Addition of a Small Fully-Associative Cache and Prefetch Buffers*.
 
-(2)	Academic interference also includes acts in which the student committing the infraction personally benefits from the interference, regardless of the effect on other students.
+---
 
+## Team
 
-LEGAL
------
-Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose, without fee, and without written agreement is
-hereby granted, provided that the above copyright notice and the following
-two paragraphs appear in all copies of this software.
-
-IN NO EVENT SHALL THE AUTHOR OR THE UNIVERSITY OF ILLINOIS BE LIABLE TO
-ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-DAMAGES ARISING OUT  OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
-EVEN IF THE AUTHOR AND/OR THE UNIVERSITY OF ILLINOIS HAS BEEN ADVISED
-OF THE POSSIBILITY OF SUCH DAMAGE.
-
-THE AUTHOR AND THE UNIVERSITY OF ILLINOIS SPECIFICALLY DISCLAIM ANY
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE
-
-PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND NEITHER THE AUTHOR NOR
-THE UNIVERSITY OF ILLINOIS HAS ANY OBLIGATION TO PROVIDE MAINTENANCE,
-SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+- Murat Altindag
+- Xinpei Jiang
+- Kelsey Chang
